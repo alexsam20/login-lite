@@ -3,6 +3,6 @@ require_once 'core/init.php';
 
 use src\DB;
 
-$db = new DB();
+$db = DB::getInstance();
 
-//var_dump($db);
+//print_pre($db);

@@ -4,6 +4,19 @@ function escape($string): string {
 }
 
 function print_pre($var, $flag = null): void {
-    echo '<pre>' , print_r($var, 1) . '</pre>';
+    echo '<pre>';
+    if (is_null($var)) {
+        print_r('null');
+    } elseif (is_bool($var)) {
+        if ($var = true) {
+            print_r('true');
+        } else {
+            print_r('false');
+        }
+    }
+    if (!is_null($var) && !is_bool($var)) {
+        print_r($var, 1);
+    }
+    echo '</pre>';
     if ($flag) { exit(); }
 }
