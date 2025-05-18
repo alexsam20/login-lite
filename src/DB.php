@@ -26,6 +26,9 @@ class DB
     public static function getInstance()
     {
 //        if (self::$_instance === null) {
+//            self::$_instance = new DB();
+//        }
+//        return self::$_instance;
         if (!isset(self::$_instance)) {
             self::$_instance = new DB();
         }
@@ -54,7 +57,7 @@ class DB
         return $this;
     }
 
-    private function action($action, $table, $where = []): false|static
+    private function action(string $action, string $table, $where = []): false|static
     {
         if (count($where) === 3) {
             $operators = ['=', '>', '<', '>=', '<=', '<>', '!='];
@@ -72,14 +75,59 @@ class DB
         return false;
     }
 
-    public function get($table, $where): false|static
+    public function get(string $table, $where): false|static
     {
         return $this->action('SELECT *', $table, $where);
     }
 
-    public function delete($table, $where): false|static
+    public function delete(string $table, $where): false|static
     {
         return $this->action('DELETE', $table, $where);
+    }
+
+    public function insert(string $table, $fields = []): bool
+    {
+        $keys = array_keys($fields);
+        $values = '';
+        $x = 1;
+
+        foreach ($fields as $field) {
+            $values .= '?';
+            if ($x < count($fields)) {
+                $values .= ', ';
+            }
+            $x++;
+        }
+
+        $sql = "INSERT INTO {$table} (`" . implode('`, `', $keys) . "`) VALUES ({$values})";
+
+        if (!$this->query($sql, $fields)->error()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function update(string $table, int $id, $fields)
+    {
+        $set = '';
+        $x = 1;
+
+        foreach ($fields as $name => $value) {
+            $set .= "{$name} = ?";
+            if ($x < count($fields)) {
+                $set .= ', ';
+            }
+            $x++;
+        }
+
+        $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
+
+        if (!$this->query($sql, $fields)->error()) {
+            return true;
+        }
+
+        return false;
     }
 
     public function results()
@@ -87,7 +135,7 @@ class DB
         return $this->_results;
     }
 
-    public function first()
+    public function first(): mixed
     {
         return $this->results()[0];
     }
