@@ -80,11 +80,6 @@ class DB
         return $this->action('SELECT *', $table, $where);
     }
 
-    public function delete(string $table, $where): false|static
-    {
-        return $this->action('DELETE', $table, $where);
-    }
-
     public function insert(string $table, $fields = []): bool
     {
         $keys = array_keys($fields);
@@ -108,7 +103,7 @@ class DB
         return false;
     }
 
-    public function update(string $table, int $id, $fields)
+    public function update(string $table, int $id, $fields): bool
     {
         $set = '';
         $x = 1;
@@ -123,11 +118,16 @@ class DB
 
         $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
 
-        if (!$this->query($sql, $fields)->error()) {
+        if (! $this->query($sql, $fields)->error()) {
             return true;
         }
 
         return false;
+    }
+
+    public function delete(string $table, $where): false|static
+    {
+        return $this->action('DELETE', $table, $where);
     }
 
     public function results()
