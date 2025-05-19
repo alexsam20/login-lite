@@ -1,7 +1,7 @@
 <?php
 require_once 'core/init.php';
 
-use src\DB;
+//use src\DB;
 
 // Select Where
 /*$user = DB::getInstance()->query("SELECT `username` FROM `users` WHERE `username` = ?", ['billy']);
@@ -39,3 +39,8 @@ $user = DB::getInstance()->insert('users', [
     'username' => 'new_name',
     'password' => 'new_password',
 ]);*/
+
+if (\src\Session::exists('success')) {
+    echo '<p>';
+    echo \src\Session::flash('success');
+}

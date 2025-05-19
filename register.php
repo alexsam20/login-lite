@@ -33,7 +33,8 @@ if (\src\Input::exists()) {
         ]);
 
         if ($validation->passed()) {
-            echo 'Passed';
+            \src\Session::flash('success', 'You registered successfully!');
+            header('location: index.php');
         } else {
             foreach ($validation->errors() as $error) {
                 echo $error . '<br />';
