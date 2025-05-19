@@ -11,13 +11,13 @@ const DB_HOST = 'localhost';
 const DB_USER = 'alex';
 const DB_PASS = 'alex1970MD3214';
 const DB_NAME = 'login';
-
 const DS = DIRECTORY_SEPARATOR;
 const APP_NAME = 'Login Lite';
 const APP_VERSION = '1.0.0';
 const COOKIE_NAME = 'hash';
 const COOKIE_LIFETIME = 604800;
 const SESSION_NAME = 'user';
+const TOKEN_NAME = 'token';
 
 //$GLOBALS['config'] = [
 //    'mysql' => [

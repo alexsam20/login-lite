@@ -16,7 +16,7 @@ class Validate
         $this->_db = DB::getInstance();
     }
 
-    public function check($source, $items = [])
+    public function check($source, $items = []): static
     {
         foreach ($items as $item => $rules) {
             foreach ($rules as $rule => $value) {

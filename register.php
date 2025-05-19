@@ -1,41 +1,47 @@
 <?php
 
+use src\Token;
 use src\Validate;
 
 require_once 'core/init.php';
 
-if (\src\Input::exists()) {
-    $validate = new Validate();
-    $validation = $validate->check($_POST, [
-        'username' => [
-            'required' => true,
-            'min' => 2,
-            'max' => 20,
-            'unique' => 'users',
-        ],
-        'password' => [
-            'required' => true,
-            'min' => 2,
-            ],
-        'password_again' => [
-            'required' => true,
-            'matches' => 'password',
-            ],
-        'name' => [
-            'required' => true,
-            'min' => 2,
-            'max' => 50,
-            ],
-    ]);
+//var_dump(\src\Token::check(\src\Input::get('token')));
 
-    if ($validation->passed()) {
-        echo 'Passed';
-    } else {
-        foreach ($validation->errors() as $error) {
-            echo $error . '<br />';
+if (\src\Input::exists()) {
+    if (Token::check(\src\Input::get('token'))) {
+        $validate = new Validate();
+        $validation = $validate->check($_POST, [
+            'username' => [
+                'required' => true,
+                'min' => 2,
+                'max' => 20,
+                'unique' => 'users',
+            ],
+            'password' => [
+                'required' => true,
+                'min' => 2,
+            ],
+            'password_again' => [
+                'required' => true,
+                'matches' => 'password',
+            ],
+            'name' => [
+                'required' => true,
+                'min' => 2,
+                'max' => 50,
+            ],
+        ]);
+
+        if ($validation->passed()) {
+            echo 'Passed';
+        } else {
+            foreach ($validation->errors() as $error) {
+                echo $error . '<br />';
+            }
         }
     }
 }
+
 ?>
 <form action="" method="post">
     <div class="field">
@@ -59,5 +65,6 @@ if (\src\Input::exists()) {
         <input type="text" id="name" value="<?php echo escape(\src\Input::get('name')); ?>" name="name" placeholder="Name" autocomplete="off"/>
     </div>
 
+    <input type="hidden" name="token" value="<?php echo \src\Token::generate(); ?>" />
     <input type="submit" value="Register"/>
 </form>
