@@ -33,14 +33,18 @@ $user = DB::getInstance()->insert('users', [
     'salt' => 'salt',
     'name' => 'Mary Russell',
     'group' => 1,
-]);*/
+]);
 // Update
-/*$user = DB::getInstance()->update('users', 3, [
+$user = DB::getInstance()->update('users', 3, [
     'username' => 'new_name',
     'password' => 'new_password',
-]);*/
-
+]);
+// Test Success
 if (\src\Session::exists('success')) {
     echo '<p>';
     echo \src\Session::flash('success');
+}*/
+// Create user account
+if (\src\Session::exists('home')) {
+    echo '<p>' . \src\Session::flash('home') . '</p>';
 }

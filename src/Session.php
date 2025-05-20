@@ -9,7 +9,7 @@ class Session
         return isset($_SESSION[$name]);
     }
 
-    public static function put(string $name, string $value)
+    public static function put(string $name, string $value): string
     {
         return $_SESSION[$name] = $value;
     }
@@ -19,7 +19,7 @@ class Session
         return $_SESSION[$name] ?? null;
     }
 
-    public static function delete(string $name)
+    public static function delete(string $name): void
     {
         if (self::exists($name)) {
             unset($_SESSION[$name]);
@@ -33,8 +33,8 @@ class Session
             self::delete($name);
 
             return $session;
-        } else {
-            self::put($name, $message);
         }
+
+        self::put($name, $message);
     }
 }

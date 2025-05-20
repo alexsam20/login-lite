@@ -1,14 +1,25 @@
 <?php
 
+use src\Hash;
+use src\Input;
+use src\Session;
 use src\Token;
+use src\User;
 use src\Validate;
 
 require_once 'core/init.php';
 
-//var_dump(\src\Token::check(\src\Input::get('token')));
+//$bytes = random_bytes(32);
+//var_dump(bin2hex($bytes));
+//
+//printf(uniqid('', true));
+//echo '<br>';
+//printf("uniqid('', true): %s\r\n", uniqid('', true));
+//
+//print_pre(crypt_gensalt(CRYPT_PREFIX_BLOWFISH, 10));
 
-if (\src\Input::exists()) {
-    if (Token::check(\src\Input::get('token'))) {
+if (Input::exists()) {
+    if (Token::check(Input::get('token'))) {
         $validate = new Validate();
         $validation = $validate->check($_POST, [
             'username' => [
@@ -33,8 +44,21 @@ if (\src\Input::exists()) {
         ]);
 
         if ($validation->passed()) {
-            \src\Session::flash('success', 'You registered successfully!');
-            header('location: index.php');
+            $user = new User();
+            $salt = Hash::salt(32);
+            try {
+                $user->create([
+                    'username' => Input::get('username'),
+                    'password' => Hash::make(Input::get('password'), $salt),
+                    'salt' => $salt,
+                    'name' => Input::get('name'),
+                    'group' => 1
+                ]);
+                Session::flash('home', 'You have been registered and can now log in!');
+                header('location: index.php');
+            } catch (\Exception $e) {
+                die($e->getMessage());
+            }
         } else {
             foreach ($validation->errors() as $error) {
                 echo $error . '<br />';
@@ -47,7 +71,7 @@ if (\src\Input::exists()) {
 <form action="" method="post">
     <div class="field">
         <label for="username">Username</label>
-        <input type="text" id="username" value="<?php echo escape(\src\Input::get('username')); ?>" name="username" placeholder="Username" autocomplete="off"/>
+        <input type="text" id="username" value="<?php echo escape(Input::get('username')); ?>" name="username" placeholder="Username" autocomplete="off"/>
     </div>
 
     <div class="field">
@@ -63,9 +87,9 @@ if (\src\Input::exists()) {
 
     <div class="field">
         <label for="name">Name</label>
-        <input type="text" id="name" value="<?php echo escape(\src\Input::get('name')); ?>" name="name" placeholder="Name" autocomplete="off"/>
+        <input type="text" id="name" value="<?php echo escape(Input::get('name')); ?>" name="name" placeholder="Name" autocomplete="off"/>
     </div>
 
-    <input type="hidden" name="token" value="<?php echo \src\Token::generate(); ?>" />
+    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>" />
     <input type="submit" value="Register"/>
 </form>

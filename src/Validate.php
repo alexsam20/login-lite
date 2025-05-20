@@ -4,11 +4,11 @@ namespace src;
 
 class Validate
 {
-    private $_passed = false;
+    private bool $_passed = false;
 
-    private $_errors = [];
+    private array $_errors = [];
 
-    private $_db = null;
+    private ?DB $_db;
 
 
     public function __construct()
