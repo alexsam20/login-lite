@@ -47,7 +47,7 @@ if (Input::exists()) {
                     'group' => 1
                 ]);
                 Session::flash('home', 'You have been registered and can now log in!');
-                Redirect::to(404);
+                Redirect::to('index.php');
             } catch (\Exception $e) {
                 die($e->getMessage());
             }

@@ -4,17 +4,55 @@ namespace src;
 
 class User
 {
-    private $_db;
+    private ?DB $_db;
+
+    private $_data;
+
+    private string $_sessionName;
 
     public function __construct($user = null)
     {
         $this->_db = DB::getInstance();
+        $this->_sessionName = SESSION_NAME;
     }
 
-    public function create($fields = [])
+    public function create($fields = []): void
     {
         if (!$this->_db->insert('users', $fields)) {
             throw new \Exception('Error inserting user.');
         }
+    }
+
+    public function find($user = null)
+    {
+        if ($user) {
+            $field = (is_numeric($user)) ? 'id' : 'username';
+            $data = $this->_db->get('users', [$field, '=', $user]);
+
+            if ($data->count()) {
+                $this->_data = $data->first();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function login(string $username = null, string $password = null)
+    {
+        $user = $this->find($username);
+        if ($user) {
+            if ($this->data()->password === Hash::make($password, $this->data()->salt)) {
+                Session::put($this->_sessionName, $this->data()->id);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function data()
+    {
+        return $this->_data;
     }
 }

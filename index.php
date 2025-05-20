@@ -50,3 +50,5 @@ if (\src\Session::exists('success')) {
 if (Session::exists('home')) {
     echo '<p style="color: green">' . Session::flash('home') . '</p>';
 }
+
+echo Session::get(SESSION_NAME);

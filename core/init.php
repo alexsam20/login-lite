@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// App Root - /home/alex/www/myframework
+// App Root - /home/alex/www/login-lite
 define('APP_ROOT', dirname(__FILE__, 2));
 // URL Root - http://127.0.0.1:8000
 define('URL_ROOT', 'http://' . $_SERVER['HTTP_HOST']);
@@ -18,25 +18,6 @@ const COOKIE_NAME = 'hash';
 const COOKIE_LIFETIME = 604800;
 const SESSION_NAME = 'user';
 const TOKEN_NAME = 'token';
-
-//$GLOBALS['config'] = [
-//    'mysql' => [
-//        'host' => 'localhost',
-//        'username' => 'alex',
-//        'password' => 'alex1970MD3214',
-//        'db' => 'login',
-//    ],
-//    'remember' => [
-//        'cookie_name' => 'hash',
-//        'cookie_lifetime' => 604800,
-//    ],
-//    'session' => [
-//        'cookie_name' => 'user',
-//    ],
-//    'link' => [
-//        'app_root' => dirname(__FILE__, 1),
-//    ]
-//];
 
 spl_autoload_register(static function($class_name) {
     $dirs = [
