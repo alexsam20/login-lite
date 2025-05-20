@@ -2,21 +2,13 @@
 
 use src\Hash;
 use src\Input;
+use src\Redirect;
 use src\Session;
 use src\Token;
 use src\User;
 use src\Validate;
 
 require_once 'core/init.php';
-
-//$bytes = random_bytes(32);
-//var_dump(bin2hex($bytes));
-//
-//printf(uniqid('', true));
-//echo '<br>';
-//printf("uniqid('', true): %s\r\n", uniqid('', true));
-//
-//print_pre(crypt_gensalt(CRYPT_PREFIX_BLOWFISH, 10));
 
 if (Input::exists()) {
     if (Token::check(Input::get('token'))) {
@@ -55,7 +47,7 @@ if (Input::exists()) {
                     'group' => 1
                 ]);
                 Session::flash('home', 'You have been registered and can now log in!');
-                header('location: index.php');
+                Redirect::to(404);
             } catch (\Exception $e) {
                 die($e->getMessage());
             }

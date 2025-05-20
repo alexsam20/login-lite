@@ -1,7 +1,9 @@
 <?php
-require_once 'core/init.php';
 
-//use src\DB;
+use src\Session;
+use src\DB;
+
+require_once 'core/init.php';
 
 // Select Where
 /*$user = DB::getInstance()->query("SELECT `username` FROM `users` WHERE `username` = ?", ['billy']);
@@ -45,6 +47,6 @@ if (\src\Session::exists('success')) {
     echo \src\Session::flash('success');
 }*/
 // Create user account
-if (\src\Session::exists('home')) {
-    echo '<p>' . \src\Session::flash('home') . '</p>';
+if (Session::exists('home')) {
+    echo '<p style="color: green">' . Session::flash('home') . '</p>';
 }
