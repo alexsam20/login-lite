@@ -2,6 +2,7 @@
 
 use src\Session;
 use src\DB;
+use src\User;
 
 require_once 'core/init.php';
 
@@ -51,4 +52,21 @@ if (Session::exists('home')) {
     echo '<p style="color: green">' . Session::flash('home') . '</p>';
 }
 
-echo Session::get(SESSION_NAME);
+/*echo Session::get(SESSION_NAME);
+$user = new User(); // current
+$another_user = new User(6); // another user
+var_dump($user);*/
+
+$user = new User();
+if ($user->isLoggedIn()) {
+?>
+    <p style="color: darkblue">Hello <a href="#"><?php echo $user->data()->name; ?></a></p>
+
+    <ul>
+        <li><a href="logout.php">Log out</a></li>
+    </ul>
+<?php
+} else {
+    echo '<p style="color: brown">You need to <a href="login.php">log in</a> or <a href="register.php">register</a> to continue.</p>';
+}
+

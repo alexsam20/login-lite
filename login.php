@@ -18,9 +18,9 @@ if (Input::exists()) {
             $user = new User();
             $login = $user->login(Input::get('username'), Input::get('password'));
             if ($login) {
-                echo 'Login success';
+                \src\Redirect::to('index.php');
             } else {
-                echo '<p>Sorry, logging in failed</p>';
+                echo '<p style="color: brown;">Sorry, logging in failed</p>';
             }
         } else {
             foreach ($validation->errors() as $error) {
