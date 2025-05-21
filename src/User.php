@@ -34,6 +34,17 @@ class User
         }
     }
 
+    public function update($fields = [], $id = null): void
+    {
+        if (!$id && $this->isLoggedIn()) {
+            $id = $this->data()->id;
+        }
+
+        if (!$this->_db->update('users', $id, $fields)) {
+            throw new \RuntimeException('Error updating user.');
+        }
+    }
+
     public function find($user = null): bool
     {
         if ($user) {
