@@ -62,6 +62,11 @@ class User
         return false;
     }
 
+    public function logout()
+    {
+        Session::delete(SESSION_NAME);
+    }
+
     public function data()
     {
         return $this->_data;
