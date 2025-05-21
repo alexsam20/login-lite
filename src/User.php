@@ -49,22 +49,47 @@ class User
         return false;
     }
 
-    public function login(string $username = null, string $password = null): bool
+    public function login(string $username = null, string $password = null, bool $remember = false): bool
     {
-        $user = $this->find($username);
-        if ($user) {
-            if ($this->data()->password === Hash::make($password, $this->data()->salt)) {
-                Session::put(SESSION_NAME, $this->data()->id);
-                return true;
+        if (!$username && !$password && $this->exists()) {
+            Session::put(SESSION_NAME, $this->data()->id);
+        } else {
+            $user = $this->find($username);
+            if ($user) {
+                if ($this->data()->password === Hash::make($password, $this->data()->salt)) {
+                    Session::put(SESSION_NAME, $this->data()->id);
+                    if ($remember) {
+                        $hash = Hash::unique();
+                        $hashCheck = $this->_db->get('users_session', ['user_id', '=', $this->data()->id]);
+                        if (!$hashCheck->count()) {
+                            $this->_db->insert('users_session', [
+                                'user_id' => $this->data()->id,
+                                'hash' => $hash,
+                            ]);
+                        } else {
+                            $hash = $hashCheck->first()->hash;
+                        }
+                        Cookie::put(COOKIE_NAME, $hash, COOKIE_LIFETIME);
+                    }
+
+                    return true;
+                }
             }
         }
 
         return false;
     }
 
-    public function logout()
+    public function exists()
     {
+        return !empty($this->_data);
+    }
+
+    public function logout(): void
+    {
+        $this->_db->delete('users_session', ['user_id', '=', $this->data()->id]);
         Session::delete(SESSION_NAME);
+        Cookie::delete(COOKIE_NAME);
     }
 
     public function data()

@@ -35,3 +35,13 @@ spl_autoload_register(static function($class_name) {
 });
 
 require_once 'functions' . DS . 'sanitize.php';
+
+if (\src\Cookie::exists(COOKIE_NAME) && !\src\Session::exists(SESSION_NAME)) {
+    $hash = \src\Cookie::get(COOKIE_NAME);
+    $hashCheck = \src\DB::getInstance()->get('users_session', ['hash', '=', $hash]);
+
+    if ($hashCheck->count()) {
+        $user = new \src\User($hashCheck->first()->user_id);
+        $user->login();
+    }
+}
