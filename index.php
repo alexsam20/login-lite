@@ -68,6 +68,13 @@ if ($user->isLoggedIn()) {
         <li><a href="changepassword.php">Change password</a></li>
     </ul>
 <?php
+//    if ($user->hasPermission('admin')) {
+//        echo '<p style="color: darkblue">You are an administrator!</p>';
+//    }
+    if ($user->hasPermission('moderator')) {
+        echo '<p style="color: darkblue">You are an moderator!</p>';
+    }
+
 } else {
     echo '<p style="color: brown">You need to <a href="login.php">log in</a> or <a href="register.php">register</a> to continue.</p>';
 }

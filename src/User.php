@@ -2,6 +2,8 @@
 
 namespace src;
 
+use JsonException;
+
 class User
 {
     private ?DB $_db;
@@ -91,7 +93,22 @@ class User
         return false;
     }
 
-    public function exists()
+    /**
+     * @throws JsonException
+     */
+    public function hasPermission($key): bool
+    {
+        $group = $this->_db->get('roles', ['id', '=', $this->data()->group]);
+        if ($group->count()) {
+            $permissions = json_decode($group->first()->permissions, true, 512, JSON_THROW_ON_ERROR);
+            if ($permissions[$key] == true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function exists(): bool
     {
         return !empty($this->_data);
     }
