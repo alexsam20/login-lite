@@ -60,7 +60,7 @@ var_dump($user);*/
 $user = new User();
 if ($user->isLoggedIn()) {
 ?>
-    <p style="color: darkblue">Hello <a href="#"><?php echo $user->data()->name; ?></a></p>
+    <p style="color: darkblue">Hello <a href="profile.php?user=<?php echo $user->data()->username; ?>"><?php echo $user->data()->username; ?></a></p>
 
     <ul>
         <li><a href="logout.php">Log out</a></li>
